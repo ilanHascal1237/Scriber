@@ -6,7 +6,7 @@
 		"ios": "expo start --ios",
 		"web": "expo start --web",
 		"eject": "expo eject",
-		"server": "nodemon server"
+		"server": "nodemon server/index"
 	},
 	"dependencies": {
 		"expo": "^34.0.1",
