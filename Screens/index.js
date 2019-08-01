@@ -1,2 +1,3 @@
-export { default as LoginUserScreen } from "./LoginUser";
-export { default as LoginHostScreen } from "./LoginHost";
+export { default as UserScreen } from "./User";
+export { default as HostScreen } from "./Host";
+export { default as LoginScreen } from "./Login";
