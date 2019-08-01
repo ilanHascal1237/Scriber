@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     borderRadius: 5, ////////////////
-    height: 100, //////////////
+    height: 70, //////////////
     backgroundColor: "red",
     fontWeight: "bold",
     justifyContent: "center"

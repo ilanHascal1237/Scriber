@@ -16,6 +16,9 @@ export default class Host extends React.Component {
         <View style={styles.headerBorder}>
           <Text style={styles.header}> Host</Text>
         </View>
+        <View>
+          <Text>Your rooms code is : XXXXXXXX</Text>
+        </View>
         <View style={{ alignItems: "center" }}>
           <TextInput
             style={{
@@ -40,6 +43,11 @@ export default class Host extends React.Component {
     );
   }
 }
+/* 
+Notes:
+-cant let the code box be empty 
+- center the text box and submit button
+*/
 
 const styles = StyleSheet.create({
   container: {
@@ -73,7 +81,8 @@ const styles = StyleSheet.create({
   buttonLabel: {
     textAlign: "center",
     fontSize: 16,
-    color: "white"
+    color: "white",
+    fontWeight: "bold"
   },
   header: {
     marginTop: 10,
