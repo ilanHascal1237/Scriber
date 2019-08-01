@@ -6,7 +6,7 @@ const morgan = require('morgan');
 
 app.use(morgan('tiny'));
 io.on('connection', socket => {
-	socket.on();
+	socket.emit('hi', 'YEET');
 });
 
 const port = process.env.PORT || 3000;
