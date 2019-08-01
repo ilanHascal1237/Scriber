@@ -2,29 +2,38 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
 import { SCREENS } from "../constants";
 
-export default class Login extends React.Component {
+export default class Host extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  // state = {
-
-  // }
+  state = {
+    code: ""
+  };
 
   render() {
-    const { navigation } = this.props;
-
     return (
-      <View style={styles.container}>
+      <View>
         <View style={styles.headerBorder}>
-          <Text style={styles.header}>Welcome to Scriber!</Text>
+          <Text style={styles.header}> Host</Text>
         </View>
-        <View style={styles.buttonAlign}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(SCREENS.HOST)}>
-            <Text style={styles.buttonLabel}>Press for Host</Text>
-          </TouchableOpacity>
+        <View style={{ alignItems: "center" }}>
+          <TextInput
+            style={{
+              height: 40,
+              textAlign: "center",
+              borderWidth: 2,
+              borderColor: "black",
+              width: 300,
+              borderRadius: 50,
+              marginTop: 10
+            }}
+            placeholder="Enter your HOST Code"
+            onChangeText={text => this.setState({ code: text })}
+          />
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonLabel}>Press for User</Text>
+            <Text style={styles.buttonLabel} onPress={text => this.setState({ code: text })}>
+              Submit Code
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -48,7 +57,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     borderRadius: 5, ////////////////
-    height: 100, //////////////
+    height: 40, //////////////
     backgroundColor: "red",
     fontWeight: "bold",
     justifyContent: "center"

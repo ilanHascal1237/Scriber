@@ -3,7 +3,7 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerNgrokUrl": "https://gv-5ug.ilanhascal1237.scriber.exp.direct",
+  "packagerNgrokUrl": "https://packager.gv-5ug.ilanhascal1237.scriber.exp.direct",
+  "ngrokPid": 10600
 }
