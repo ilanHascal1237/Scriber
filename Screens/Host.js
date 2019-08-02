@@ -5,8 +5,18 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  FlatList
 } from "react-native";
+
+import { Audio } from "expo-av";
+import FormData from "form-data";
+import * as Permissions from "expo-permissions";
+import * as FileSystem from "expo-file-system";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+// import Config from "react-native-config";
+
 import { SCREENS } from "../constants";
 
 export default class Host extends Component {
@@ -17,7 +27,6 @@ export default class Host extends Component {
     this.sound = null;
 
     this.recordingOptions = {
-      // android not currently in use, but parameters are required
       android: {
         extension: ".m4a",
         outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
@@ -40,6 +49,7 @@ export default class Host extends Component {
 
     this.state = {
       code: "",
+      messages: ['Hello world', 'Okay'],
       haveRecordingPermissions: false,
       isLoading: false,
       isRecording: false,
@@ -115,6 +125,7 @@ export default class Host extends Component {
       );
       const data = await response.json();
       console.log(data);
+      this.setState({ messages: [...this.state.messages, data.transcript] });
     } catch (error) {
       console.log("ERROR:", error);
     }
@@ -166,20 +177,18 @@ export default class Host extends Component {
   render() {
     return (
       <View>
-        <View style={styles.headerBorder}>
-          <Text style={styles.header}> Host</Text>
-        </View>
-        <View>
-          <Text>Your rooms code is : XXXXXXXX</Text>
-        </View>
-        <View style={{ alignItems: "center" }}>
-          <TextInput
+
+        <View style={{ alignItems: "center", padding: 30 }}>
+          <View style={{ marignTop: 30 }}>
+            <Text style={styles.header}>room code: abc</Text>
+          </View>
+          {/* <TextInput
             style={{
               height: 40,
               textAlign: "center",
-              borderWidth: 2,
+              borderWidth: 1,
               borderColor: "black",
-              width: 300,
+              width: 250,
               borderRadius: 50,
               marginTop: 10
             }}
@@ -191,18 +200,30 @@ export default class Host extends Component {
               style={styles.buttonLabel}
               onPress={text => this.setState({ code: text })}
             >
-              Submit Code
+              submit
             </Text>
+          </TouchableOpacity> */}
+          <FlatList
+            data={this.state.messages}
+            style={{ display: 'flex' }}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity style={styles.textBox} onPress={this.onRecordPressed}>
+                  <Text style={styles.msg}>{item}</Text>
+                </TouchableOpacity>
+              )
+            }}
+
+          />
+
+          <TouchableOpacity style={styles.recordButton} onPress={this.onRecordPressed}>
+            <Icon style={{ alignItems: 'center', justifyContent: 'center' }} name="microphone" size={40} />
           </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={this.onRecordPressed}>
-            <Text>Record Button</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.onPlayPausePressed}>
+          {/* <TouchableOpacity onPress={this.onPlayPausePressed}>
             <Text>Play Button</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
+
       </View>
     );
   }
@@ -222,45 +243,85 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    alignSelf: "stretch",
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 10,
     marginLeft: 5,
     marginRight: 5,
-    borderRadius: 5, ////////////////
-    height: 40, //////////////
-    backgroundColor: "red",
+    borderRadius: 45,
+    width: 250,
+    height: 70,
+    backgroundColor: "white",
+    borderColor: 'black',
+    borderWidth: 1,
+    fontWeight: "bold",
+    justifyContent: "center"
+  },
+
+  textBox: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginTop: 10,
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 45,
+    backgroundColor: "white",
+    borderColor: 'black',
+    borderWidth: 1,
+    fontWeight: "bold",
+    justifyContent: "center",
+    width: 310
+  },
+
+  msg: {
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    padding: 10
+  },
+
+  recordButton: {
+    display: 'flex',
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginTop: 10,
+    marginLeft: 5,
+    marginRight: 5,
+    borderRadius: 45,
+    width: 80,
+    height: 80,
+    backgroundColor: "white",
+    borderColor: 'black',
+    borderWidth: 1,
     fontWeight: "bold",
     justifyContent: "center"
   },
 
   buttonAlign: {
-    justifyContent: "space-evenly", /////////
+    justifyContent: "center",
     flex: 1,
-    backgroundColor: "#F5FCFF",
-    alignSelf: "stretch"
+    width: 250
   },
 
   buttonLabel: {
     textAlign: "center",
-    fontSize: 16,
-    color: "white",
-    fontWeight: "bold"
+    fontSize: 30,
+    fontFamily: 'System',
+    color: "black"
   },
   header: {
     marginTop: 10,
+    marginBottom: 20,
     textAlign: "center",
-    color: "white",
+    color: "black",
     fontWeight: "bold",
-    fontSize: 25
+    fontSize: 35
   },
   headerBorder: {
-    backgroundColor: "red",
     height: 50,
     justifyContent: "center",
     borderRadius: 10,
     flex: 0,
-    alignSelf: "stretch"
   }
 });
