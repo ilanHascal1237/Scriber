@@ -69,18 +69,27 @@ export default class Host extends Component {
       this.setState({
         messages: this.state.messages.concat([data])
       });
-    };
+	};
+	this.editMsg = ({message, index}) => {
+		this.setState({
+			messages: Object.assign([], this.state.messages, {
+			  [index]: message
+			})
+		});
+	};
   }
 
   componentDidMount() {
     this.socket = this.props.navigation.getParam("socket", null);
     this.setState({ code: this.props.navigation.getParam("code", null) });
-    this.socket.on("newMsg", this.addMsg);
+	this.socket.on("newMsg", this.addMsg);
+	this.socket.on("editMsg", this.editMsg);
   }
 
   componentWillUnmount() {
     this.socket.emit("removeMyRooms");
-    this.socket.removeListener("newMsg", this.addMsg);
+	this.socket.removeListener("newMsg", this.addMsg);
+	this.socket.removeListener("editMsg", this.editMsg);
   }
 
   startRecording = async () => {
@@ -205,16 +214,15 @@ export default class Host extends Component {
       "Edit message",
       null,
       message => {
-        this.setState({
-          messages: Object.assign([], this.state.messages, {
-            [index]: message
-          })
-        });
+		this.socket.emit('editMsg', {
+			message,
+			index
+		})
       },
       "plain-text",
       this.state.messages[index],
       null
-    );
+	);	
   };
 
   onPicture(picture) {

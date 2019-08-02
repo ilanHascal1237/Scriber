@@ -8,8 +8,11 @@ import {
   AsyncStorage,
   FlatList,
   Picker,
-  Button
+  Button,
+  Share
 } from 'react-native';
+
+import { Linking } from 'react-native'
 
 export default class User extends React.Component {
   constructor(props) {
@@ -35,7 +38,17 @@ export default class User extends React.Component {
       console.log(messages)
       this.setState({ messages })
     }
-    
+    this.editMsg = ({message, index}) => {
+      this.setState({
+        messages: Object.assign([], this.state.messages, {
+          [index]: message
+        })
+      });
+    };
+  }
+
+  formatMessages() {
+    return this.state.messages.join('\n')
   }
 
   componentDidMount() {
@@ -43,12 +56,14 @@ export default class User extends React.Component {
     this.setState({ code: this.props.navigation.getParam('code', null) })
     this.socket.on('newMsg', this.addMsg);
     this.socket.on('translate', this.updateMsg);
+    this.socket.on("editMsg", this.editMsg);
   }
 
   componentWillUnmount() {
     this.socket.emit('removeMyRooms');
     this.socket.removeListener('newMsg', this.addMsg);
     this.socket.removeListener('translate', this.updateMsg);
+    this.socket.removeListener("editMsg", this.editMsg);
   }
 
   translatePressed() {
@@ -94,6 +109,10 @@ export default class User extends React.Component {
           />
           <Button onPress={this.translatePressed.bind(this)} 
           title={this.state.selectingLanguage ? 'Confirm' : 'Translate' }/>
+          <Button onPress={() => {
+
+            Share.share({message: this.formatMessages()}, {subject: 'scriber transcript'}) 
+          }} title="Share transcript"/>
           {this.state.selectingLanguage && 
           <Picker
             selectedValue={this.state.language}
