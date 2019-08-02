@@ -8,16 +8,11 @@ import {
   AsyncStorage,
   FlatList,
   Picker,
-<<<<<<< HEAD
-  Button
-} from "react-native";
-=======
   Button,
   Share
-} from 'react-native';
->>>>>>> master
+} from "react-native";
 
-import { Linking } from 'react-native'
+import { Linking } from "react-native";
 
 export default class User extends React.Component {
   constructor(props) {
@@ -40,28 +35,10 @@ export default class User extends React.Component {
       });
     };
     this.updateMsg = messages => {
-<<<<<<< HEAD
       console.log(messages);
       this.setState({ messages });
     };
-  }
-
-  componentDidMount() {
-    this.socket = this.props.navigation.getParam("socket", null);
-    this.setState({ code: this.props.navigation.getParam("code", null) });
-    this.socket.on("newMsg", this.addMsg);
-    this.socket.on("translate", this.updateMsg);
-  }
-
-  componentWillUnmount() {
-    this.socket.emit("removeMyRooms");
-    this.socket.removeListener("newMsg", this.addMsg);
-    this.socket.removeListener("translate", this.updateMsg);
-=======
-      console.log(messages)
-      this.setState({ messages })
-    }
-    this.editMsg = ({message, index}) => {
+    this.editMsg = ({ message, index }) => {
       this.setState({
         messages: Object.assign([], this.state.messages, {
           [index]: message
@@ -71,23 +48,22 @@ export default class User extends React.Component {
   }
 
   formatMessages() {
-    return this.state.messages.join('\n')
+    return this.state.messages.join("\n");
   }
 
   componentDidMount() {
-    this.socket = this.props.navigation.getParam('socket', null);
-    this.setState({ code: this.props.navigation.getParam('code', null) })
-    this.socket.on('newMsg', this.addMsg);
-    this.socket.on('translate', this.updateMsg);
+    this.socket = this.props.navigation.getParam("socket", null);
+    this.setState({ code: this.props.navigation.getParam("code", null) });
+    this.socket.on("newMsg", this.addMsg);
+    this.socket.on("translate", this.updateMsg);
     this.socket.on("editMsg", this.editMsg);
   }
 
   componentWillUnmount() {
-    this.socket.emit('removeMyRooms');
-    this.socket.removeListener('newMsg', this.addMsg);
-    this.socket.removeListener('translate', this.updateMsg);
+    this.socket.emit("removeMyRooms");
+    this.socket.removeListener("newMsg", this.addMsg);
+    this.socket.removeListener("translate", this.updateMsg);
     this.socket.removeListener("editMsg", this.editMsg);
->>>>>>> master
   }
 
   translatePressed() {
@@ -132,10 +108,18 @@ export default class User extends React.Component {
               );
             }}
           />
-<<<<<<< HEAD
           <Button
             onPress={this.translatePressed.bind(this)}
             title={this.state.selectingLanguage ? "Confirm" : "Translate"}
+          />
+          <Button
+            onPress={() => {
+              Share.share(
+                { message: this.formatMessages() },
+                { subject: "scriber transcript" }
+              );
+            }}
+            title="Share transcript"
           />
           {this.state.selectingLanguage && (
             <Picker
@@ -153,28 +137,6 @@ export default class User extends React.Component {
               <Picker.Item label="Russian" value="ru" />
             </Picker>
           )}
-=======
-          <Button onPress={this.translatePressed.bind(this)} 
-          title={this.state.selectingLanguage ? 'Confirm' : 'Translate' }/>
-          <Button onPress={() => {
-
-            Share.share({message: this.formatMessages()}, {subject: 'scriber transcript'}) 
-          }} title="Share transcript"/>
-          {this.state.selectingLanguage && 
-          <Picker
-            selectedValue={this.state.language}
-            style={{ alignSelf: 'stretch' }}
-            onValueChange={(itemValue, itemIndex) => {
-              console.log(itemValue);
-              this.setState({ language: itemValue })
-            }}>
-            <Picker.Item label="English" value="en" />
-            <Picker.Item label="Spanish" value="es" />
-            <Picker.Item label="French" value="fr" />
-            <Picker.Item label="Chinese" value="zh" />
-            <Picker.Item label="Russian" value="ru" />
-          </Picker>}
->>>>>>> master
         </View>
       </View>
     );
