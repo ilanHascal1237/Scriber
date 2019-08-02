@@ -7,7 +7,9 @@ import {
   TextInput,
   AsyncStorage,
   FlatList,
-  AlertIOS
+  AlertIOS,
+  Image,
+  YellowBox
 } from "react-native";
 
 import { Audio } from "expo-av";
@@ -22,7 +24,14 @@ import CameraComponent from "./CameraComponent";
 
 import { SCREENS } from "../constants";
 
-const BACKEND = "https://obscure-basin-81956.herokuapp.com";
+// const BACKEND = "https://obscure-basin-81956.herokuapp.com";
+
+const BACKEND = "http://192.168.1.88:3000";
+
+console.ignoredYellowBox = ["Remote debugger"];
+YellowBox.ignoreWarnings([
+  "Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?"
+]);
 
 export default class Host extends Component {
   constructor(props) {
@@ -54,11 +63,7 @@ export default class Host extends Component {
 
     this.state = {
       code: "",
-      messages: [
-        "Welcome to Horizons",
-        "Here is the water coolor",
-        "Here is the fly infested bathroom"
-      ],
+      messages: [],
       haveRecordingPermissions: false,
       isLoading: false,
       isRecording: false,
@@ -71,27 +76,27 @@ export default class Host extends Component {
       this.setState({
         messages: this.state.messages.concat([data])
       });
-	};
-	this.editMsg = ({message, index}) => {
-		this.setState({
-			messages: Object.assign([], this.state.messages, {
-			  [index]: message
-			})
-		});
-	};
+    };
+    this.editMsg = ({ message, index }) => {
+      this.setState({
+        messages: Object.assign([], this.state.messages, {
+          [index]: message
+        })
+      });
+    };
   }
 
   componentDidMount() {
     this.socket = this.props.navigation.getParam("socket", null);
     this.setState({ code: this.props.navigation.getParam("code", null) });
-	this.socket.on("newMsg", this.addMsg);
-	this.socket.on("editMsg", this.editMsg);
+    this.socket.on("newMsg", this.addMsg);
+    this.socket.on("editMsg", this.editMsg);
   }
 
   componentWillUnmount() {
     this.socket.emit("removeMyRooms");
-	this.socket.removeListener("newMsg", this.addMsg);
-	this.socket.removeListener("editMsg", this.editMsg);
+    this.socket.removeListener("newMsg", this.addMsg);
+    this.socket.removeListener("editMsg", this.editMsg);
   }
 
   startRecording = async () => {
@@ -216,15 +221,15 @@ export default class Host extends Component {
       "Edit message",
       null,
       message => {
-		this.socket.emit('editMsg', {
-			message,
-			index
-		})
+        this.socket.emit("editMsg", {
+          message,
+          index
+        });
       },
       "plain-text",
       this.state.messages[index],
       null
-	);	
+    );
   };
 
   onPicture = picture => {
@@ -258,7 +263,7 @@ export default class Host extends Component {
       body: formData
     });
 
-    console.log("response:", response);
+    console.log("response:", await response.json());
   }
 
   render() {
@@ -313,7 +318,15 @@ export default class Host extends Component {
                     </TouchableOpacity>
                   );
                 } else {
-                  return <Image source="item.uri" />;
+                  console.log("rendering image", item);
+                  return (
+                    <View style={[styles.textBox, { overflow: "hidden" }]}>
+                      <Image
+                        source={{ uri: item.uri }}
+                        style={{ width: 350, height: 350 }}
+                      />
+                    </View>
+                  );
                 }
               }}
             />

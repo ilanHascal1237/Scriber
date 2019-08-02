@@ -9,21 +9,24 @@ import {
   FlatList,
   Picker,
   Button,
-  Share
+  Share,
+  Image,
+  YellowBox
 } from "react-native";
 
 import { Linking } from "react-native";
+
+console.ignoredYellowBox = ["Remote debugger"];
+YellowBox.ignoreWarnings([
+  "Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?"
+]);
 
 export default class User extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      messages: [
-        "Welcome to Horizons",
-        "Here is the water coolor",
-        "Here is the fly infested bathroom"
-      ],
+      messages: [],
       code: "",
       language: "en"
     };
@@ -96,16 +99,38 @@ export default class User extends React.Component {
               height: 400
             }}
             ref="flatList"
+            keyExtractor={(item, index) => index.toString()}
             onContentSizeChange={() => this.refs.flatList.scrollToEnd()}
             renderItem={({ item }) => {
-              return (
-                <TouchableOpacity
-                  style={styles.textBox}
-                  onPress={this.onRecordPressed}
-                >
-                  <Text style={styles.msg}>{item}</Text>
-                </TouchableOpacity>
-              );
+              if (typeof item === "string") {
+                return (
+                  <TouchableOpacity
+                    style={styles.textBox}
+                    onPress={this.onRecordPressed}
+                  >
+                    <Text style={styles.msg}>{item}</Text>
+                  </TouchableOpacity>
+                );
+              } else {
+                console.log("rendering image", item);
+                return (
+                  <View
+                    style={[
+                      styles.textBox,
+                      {
+                        overflow: "hidden",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }
+                    ]}
+                  >
+                    <Image
+                      source={{ uri: item.uri }}
+                      style={{ width: 350, height: 350 }}
+                    />
+                  </View>
+                );
+              }
             }}
           />
           <Button
