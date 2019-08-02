@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   AsyncStorage,
-  FlatList
+  FlatList,
+  Picker
 } from "react-native";
 
 export default class User extends React.Component {
@@ -49,7 +50,6 @@ export default class User extends React.Component {
 
           />
         </View>
-
       </View>
     );
   }
