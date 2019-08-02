@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -6,48 +6,75 @@ import {
   TouchableOpacity,
   TextInput,
   AsyncStorage,
-  FlatList,
-  Picker
-} from "react-native";
+  FlatList
+} from 'react-native';
 
 export default class User extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      messages: ['Welcome to Horizons', 'Here is the water coolor', 'Here is the fly infested bathroom'],
+      messages: [
+        'Welcome to Horizons',
+        'Here is the water coolor',
+        'Here is the fly infested bathroom',
+        'Welcome to Horizons',
+        'Here is the water coolor',
+        'Here is the fly infested bathroom',
+        'Welcome to Horizons',
+        'Here is the water coolor',
+        'Here is the fly infested bathroom',
+        'can I start recording how do you know a fuck okay this question had bothered me for four years from the time I had heard about the discovery that a quantum computer was spectacularly good okay'
+      ],
       code: 'abc'
-    }
+    };
     this.socket = null;
+    this.addMsg = data => {
+      this.setState({
+        messages: this.state.messages.concat([data])
+      });
+    };
   }
 
   componentDidMount() {
     this.socket = this.props.navigation.getParam('socket', null);
-    this.socket.on('newMsg', (data) => {
-      this.setState({
-        messages: this.state.messages.concat([data])
-      })
-    })
+    this.socket.on('newMsg', this.addMsg);
+  }
+
+  componentWillUnmount() {
+    this.socket.emit('removeMyRooms');
+    this.socket.removeListener('newMsg', this.addMsg);
   }
 
   render() {
     return (
       <View>
-        <View style={{ alignItems: "center", padding: 30 }}>
+        <View
+          style={{
+            alignItems: 'center',
+            padding: 30
+          }}
+        >
           <View style={{ marignTop: 30 }}>
-            <Text style={styles.header}>room code: {this.state.code}</Text>
+            <Text style={styles.header}>
+              room code: {this.state.code}
+            </Text>
           </View>
           <FlatList
             data={this.state.messages}
-            style={{ display: 'flex' }}
+            style={{
+              height: 500
+            }}
             renderItem={({ item }) => {
               return (
-                <TouchableOpacity style={styles.textBox} onPress={this.onRecordPressed}>
+                <TouchableOpacity
+                  style={styles.textBox}
+                  onPress={this.onRecordPressed}
+                >
                   <Text style={styles.msg}>{item}</Text>
                 </TouchableOpacity>
-              )
+              );
             }}
-
           />
         </View>
       </View>
@@ -62,10 +89,10 @@ Notes:
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    display: 'flex',
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   button: {
@@ -77,38 +104,37 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     width: 250,
     height: 70,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 1,
-    fontWeight: "bold",
-    justifyContent: "center"
+    fontWeight: 'bold',
+    justifyContent: 'center'
   },
 
   textBox: {
-    paddingTop: 5,
-    paddingBottom: 5,
+    padding: 10,
     marginTop: 10,
     marginLeft: 5,
     marginRight: 5,
     borderRadius: 45,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 1,
-    fontWeight: "bold",
-    justifyContent: "center",
+    fontWeight: 'bold',
+    justifyContent: 'center',
     width: 310
   },
 
   msg: {
-    borderBottomColor: "black",
+    borderBottomColor: 'black',
     borderBottomWidth: 1,
     padding: 10
   },
 
   recordButton: {
     display: 'flex',
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 10,
@@ -117,38 +143,37 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     width: 80,
     height: 80,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 1,
-    fontWeight: "bold",
-    justifyContent: "center"
+    fontWeight: 'bold',
+    justifyContent: 'center'
   },
 
   buttonAlign: {
-    justifyContent: "center",
+    justifyContent: 'center',
     flex: 1,
     width: 250
   },
 
   buttonLabel: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 30,
     fontFamily: 'System',
-    color: "black"
+    color: 'black'
   },
   header: {
     marginTop: 10,
     marginBottom: 20,
-    textAlign: "center",
-    color: "black",
-    fontWeight: "bold",
+    textAlign: 'center',
+    color: 'black',
+    fontWeight: 'bold',
     fontSize: 35
   },
   headerBorder: {
     height: 50,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: 10,
-    flex: 0,
+    flex: 0
   }
 });
-
