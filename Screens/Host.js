@@ -22,6 +22,8 @@ import CameraComponent from "./CameraComponent";
 
 import { SCREENS } from "../constants";
 
+const BACKEND = "https://obscure-basin-81956.herokuapp.com";
+
 export default class Host extends Component {
   constructor(props) {
     super(props);
@@ -217,11 +219,11 @@ export default class Host extends Component {
     );
   };
 
-  onPicture(picture) {
+  onPicture = picture => {
     console.log("picture:", picture);
     this.setState({ picture, isCameraOn: false });
     this.uploadImage();
-  }
+  };
 
   onCancel() {
     this.setState({ isCameraOn: false });
@@ -236,15 +238,19 @@ export default class Host extends Component {
       name: "photo.jpg"
     });
 
-    // const response = await fetch(
-    //   "",
-    //   {
-    //     method: "POST",
-    //     body: formData
-    //   }
-    // );
+    formData.append("id", this.socket.id);
 
-    const data = await response.json();
+    console.log("formData", formData);
+
+    const response = await fetch(BACKEND + "/image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      body: formData
+    });
+
+    console.log("response:", response);
   }
 
   render() {
@@ -258,7 +264,7 @@ export default class Host extends Component {
         ) : (
           <View style={{ alignItems: "center", padding: 30 }}>
             <View style={{ marginTop: 30 }}>
-              <Text style={styles.header}>room code: {this.state.code}</Text>
+              <Text style={styles.header}>Room ID: {this.state.code}</Text>
             </View>
             {/* <TextInput
             style={{
@@ -287,32 +293,74 @@ export default class Host extends Component {
               ref="flatList"
               onContentSizeChange={() => this.refs.flatList.scrollToEnd()}
               renderItem={({ item, index }) => {
-                return (
-                  <TouchableOpacity
-                    style={styles.textBox}
-                    onPress={this.editMessage.bind(this, item, index)}
-                    onLongPress={() => this.setState({ isCameraOn: true })}
-                    delayLongPress={1000}
-                  >
-                    <Text style={styles.msg}>{item}</Text>
-                  </TouchableOpacity>
-                );
+                if (typeof item === "string") {
+                  return (
+                    <TouchableOpacity
+                      style={styles.textBox}
+                      onPress={this.editMessage.bind(this, item, index)}
+                      // onLongPress={() => this.setState({ isCameraOn: true })}
+                      // delayLongPress={1000}
+                    >
+                      <Text style={styles.msg}>{item}</Text>
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return <Image source="item.uri" />;
+                }
               }}
             />
-            <View style={{ alignItems: "center" }}>
+            <View
+              style={{
+                alignItems: "center",
+                flexDirection: "row"
+              }}
+            >
               <TouchableOpacity
-                style={styles.recordButton}
-                onPress={this.onRecordPressed}
+                style={[styles.recordButton, { marginRight: 30 }]}
+                onPress={() => this.setState({ isCameraOn: true })}
               >
                 <Icon
                   style={{
                     alignItems: "center",
                     justifyContent: "center"
                   }}
-                  name="microphone"
+                  name="camera"
                   size={40}
                 />
               </TouchableOpacity>
+              {this.state.isRecording ? (
+                <TouchableOpacity
+                  style={[
+                    styles.recordButton,
+                    { marginLeft: 30, borderColor: "red" }
+                  ]}
+                  onPress={this.onRecordPressed}
+                >
+                  <Icon
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "red"
+                    }}
+                    name="square"
+                    size={40}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.recordButton, { marginLeft: 30 }]}
+                  onPress={this.onRecordPressed}
+                >
+                  <Icon
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                    name="microphone"
+                    size={40}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
 
             {/* <TouchableOpacity onPress={this.onPlayPausePressed}>

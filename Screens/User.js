@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -9,7 +9,7 @@ import {
   FlatList,
   Picker,
   Button
-} from 'react-native';
+} from "react-native";
 
 export default class User extends React.Component {
   constructor(props) {
@@ -17,12 +17,12 @@ export default class User extends React.Component {
 
     this.state = {
       messages: [
-        'Welcome to Horizons',
-        'Here is the water coolor',
-        'Here is the fly infested bathroom',
+        "Welcome to Horizons",
+        "Here is the water coolor",
+        "Here is the fly infested bathroom"
       ],
-      code: '',
-      language: 'en'
+      code: "",
+      language: "en"
     };
     this.socket = null;
     this.addMsg = data => {
@@ -32,31 +32,33 @@ export default class User extends React.Component {
       });
     };
     this.updateMsg = messages => {
-      console.log(messages)
-      this.setState({ messages })
-    }
-    
+      console.log(messages);
+      this.setState({ messages });
+    };
   }
 
   componentDidMount() {
-    this.socket = this.props.navigation.getParam('socket', null);
-    this.setState({ code: this.props.navigation.getParam('code', null) })
-    this.socket.on('newMsg', this.addMsg);
-    this.socket.on('translate', this.updateMsg);
+    this.socket = this.props.navigation.getParam("socket", null);
+    this.setState({ code: this.props.navigation.getParam("code", null) });
+    this.socket.on("newMsg", this.addMsg);
+    this.socket.on("translate", this.updateMsg);
   }
 
   componentWillUnmount() {
-    this.socket.emit('removeMyRooms');
-    this.socket.removeListener('newMsg', this.addMsg);
-    this.socket.removeListener('translate', this.updateMsg);
+    this.socket.emit("removeMyRooms");
+    this.socket.removeListener("newMsg", this.addMsg);
+    this.socket.removeListener("translate", this.updateMsg);
   }
 
   translatePressed() {
     if (this.state.selectingLanguage) {
-      this.socket.emit('translate', { messages: this.state.messages, language: this.state.language})
-      this.setState({selectingLanguage: false})
+      this.socket.emit("translate", {
+        messages: this.state.messages,
+        language: this.state.language
+      });
+      this.setState({ selectingLanguage: false });
     } else {
-      this.setState({selectingLanguage: true})
+      this.setState({ selectingLanguage: true });
     }
   }
 
@@ -65,22 +67,20 @@ export default class User extends React.Component {
       <View>
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             paddingTop: 30
           }}
         >
           <View style={{ marignTop: 30 }}>
-            <Text style={styles.header}>
-              room code: {this.state.code}
-            </Text>
+            <Text style={styles.header}>Room ID: {this.state.code}</Text>
           </View>
           <FlatList
             data={this.state.messages}
             style={{
               height: 400
             }}
-            ref = "flatList"
-            onContentSizeChange={()=> this.refs.flatList.scrollToEnd()}
+            ref="flatList"
+            onContentSizeChange={() => this.refs.flatList.scrollToEnd()}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
@@ -92,22 +92,26 @@ export default class User extends React.Component {
               );
             }}
           />
-          <Button onPress={this.translatePressed.bind(this)} 
-          title={this.state.selectingLanguage ? 'Confirm' : 'Translate' }/>
-          {this.state.selectingLanguage && 
-          <Picker
-            selectedValue={this.state.language}
-            style={{ alignSelf: 'stretch' }}
-            onValueChange={(itemValue, itemIndex) => {
-              console.log(itemValue);
-              this.setState({ language: itemValue })
-            }}>
-            <Picker.Item label="English" value="en" />
-            <Picker.Item label="Spanish" value="es" />
-            <Picker.Item label="French" value="fr" />
-            <Picker.Item label="Chinese" value="zh" />
-            <Picker.Item label="Russian" value="ru" />
-          </Picker>}
+          <Button
+            onPress={this.translatePressed.bind(this)}
+            title={this.state.selectingLanguage ? "Confirm" : "Translate"}
+          />
+          {this.state.selectingLanguage && (
+            <Picker
+              selectedValue={this.state.language}
+              style={{ alignSelf: "stretch" }}
+              onValueChange={(itemValue, itemIndex) => {
+                console.log(itemValue);
+                this.setState({ language: itemValue });
+              }}
+            >
+              <Picker.Item label="English" value="en" />
+              <Picker.Item label="Spanish" value="es" />
+              <Picker.Item label="French" value="fr" />
+              <Picker.Item label="Chinese" value="zh" />
+              <Picker.Item label="Russian" value="ru" />
+            </Picker>
+          )}
         </View>
       </View>
     );
@@ -121,15 +125,13 @@ Notes:
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
+    display: "flex",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
 
-  picker: {
-
-  },
+  picker: {},
 
   button: {
     paddingTop: 10,
@@ -140,11 +142,11 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     width: 250,
     height: 70,
-    backgroundColor: 'white',
-    borderColor: 'black',
+    backgroundColor: "white",
+    borderColor: "black",
     borderWidth: 1,
-    fontWeight: 'bold',
-    justifyContent: 'center'
+    fontWeight: "bold",
+    justifyContent: "center"
   },
 
   textBox: {
@@ -153,24 +155,24 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     borderRadius: 45,
-    backgroundColor: 'white',
-    borderColor: 'black',
+    backgroundColor: "white",
+    borderColor: "black",
     borderWidth: 1,
-    fontWeight: 'bold',
-    justifyContent: 'center',
+    fontWeight: "bold",
+    justifyContent: "center",
     width: 310
   },
 
   msg: {
-    borderBottomColor: 'black',
+    borderBottomColor: "black",
     borderBottomWidth: 1,
     padding: 10
   },
 
   recordButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 10,
@@ -179,36 +181,36 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     width: 80,
     height: 80,
-    backgroundColor: 'white',
-    borderColor: 'black',
+    backgroundColor: "white",
+    borderColor: "black",
     borderWidth: 1,
-    fontWeight: 'bold',
-    justifyContent: 'center'
+    fontWeight: "bold",
+    justifyContent: "center"
   },
 
   buttonAlign: {
-    justifyContent: 'center',
+    justifyContent: "center",
     flex: 1,
     width: 250
   },
 
   buttonLabel: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 30,
-    fontFamily: 'System',
-    color: 'black'
+    fontFamily: "System",
+    color: "black"
   },
   header: {
     marginTop: 10,
     marginBottom: 20,
-    textAlign: 'center',
-    color: 'black',
-    fontWeight: 'bold',
+    textAlign: "center",
+    color: "black",
+    fontWeight: "bold",
     fontSize: 35
   },
   headerBorder: {
     height: 50,
-    justifyContent: 'center',
+    justifyContent: "center",
     borderRadius: 10,
     flex: 0
   }

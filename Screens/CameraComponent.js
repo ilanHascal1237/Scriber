@@ -36,7 +36,7 @@ export default class CameraComponent extends Component {
     >
       <View
         style={{
-          height: 100,
+          height: 40,
           backgroundColor: "transparent",
           justifyContent: "flex-start",
           marginLeft: 30,
@@ -52,7 +52,7 @@ export default class CameraComponent extends Component {
               justifyContent: "center"
             }}
             name="times"
-            size={50}
+            size={30}
             color="white"
           />
         </TouchableOpacity>
@@ -69,7 +69,7 @@ export default class CameraComponent extends Component {
     >
       <View
         style={{
-          height: 100,
+          height: 200,
           backgroundColor: "transparent",
           justifyContent: "center",
           alignItems: "center",
@@ -83,7 +83,7 @@ export default class CameraComponent extends Component {
               justifyContent: "center"
             }}
             name="circle-thin"
-            size={50}
+            size={100}
             color="white"
           />
         </TouchableOpacity>
