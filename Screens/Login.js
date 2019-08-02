@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, FlatList } from "react-native";
 import { SCREENS } from "../constants";
 
 export default class Login extends React.Component {
@@ -7,24 +7,18 @@ export default class Login extends React.Component {
     super(props);
   }
 
-  // state = {
-
-  // }
-
   render() {
     const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
-        <View style={styles.headerBorder}>
-          <Text style={styles.header}>Welcome to Scriber!</Text>
-        </View>
         <View style={styles.buttonAlign}>
+          <Text style={styles.header}>scriber</Text>
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(SCREENS.HOST)}>
-            <Text style={styles.buttonLabel}>Press for Host</Text>
+            <Text style={styles.buttonLabel}>host</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonLabel}>Press for User</Text>
+            <Text style={styles.buttonLabel}>join</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -41,44 +35,45 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    alignSelf: "stretch",
     paddingTop: 10,
     paddingBottom: 10,
     marginTop: 10,
     marginLeft: 5,
     marginRight: 5,
-    borderRadius: 5, ////////////////
-    height: 70, //////////////
-    backgroundColor: "red",
+    borderRadius: 45,
+    height: 70,
+    backgroundColor: "white",
+    borderColor: 'black',
+    borderWidth: 1,
     fontWeight: "bold",
     justifyContent: "center"
   },
 
   buttonAlign: {
-    justifyContent: "space-evenly", /////////
+    justifyContent: "center",
     flex: 1,
-    backgroundColor: "#F5FCFF",
-    alignSelf: "stretch"
+    width: 250
   },
 
   buttonLabel: {
     textAlign: "center",
-    fontSize: 16,
-    color: "white"
+    fontSize: 30,
+    fontFamily: 'System',
+    //fontWeight: 'bold',
+    color: "black"
   },
   header: {
     marginTop: 10,
+    marginBottom: 20,
     textAlign: "center",
-    color: "white",
+    color: "black",
     fontWeight: "bold",
-    fontSize: 25
+    fontSize: 45
   },
   headerBorder: {
-    backgroundColor: "red",
     height: 50,
     justifyContent: "center",
     borderRadius: 10,
     flex: 0,
-    alignSelf: "stretch"
   }
 });
