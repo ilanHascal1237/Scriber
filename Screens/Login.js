@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, FlatList } from "react-native";
+import React from "react";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, FlatList, Alert } from "react-native";
 import { SCREENS } from "../constants";
 
 export default class Login extends React.Component {
@@ -7,17 +7,23 @@ export default class Login extends React.Component {
     super(props);
   }
 
+  joinRoom() {
+    Alert.prompt('Enter room code', null, (code) => {
+      console.log(code);
+      this.props.navigation.navigate(SCREENS.USER);
+    })
+  }
+
   render() {
-    const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
         <View style={styles.buttonAlign}>
           <Text style={styles.header}>scriber</Text>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(SCREENS.HOST)}>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate(SCREENS.HOST)}>
             <Text style={styles.buttonLabel}>host</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={this.joinRoom.bind(this)} >
             <Text style={styles.buttonLabel}>join</Text>
           </TouchableOpacity>
         </View>
@@ -58,8 +64,7 @@ const styles = StyleSheet.create({
   buttonLabel: {
     textAlign: "center",
     fontSize: 30,
-    fontFamily: 'System',
-    //fontWeight: 'bold',
+    fontFamily: 'HelveticaNeue',
     color: "black"
   },
   header: {
@@ -68,7 +73,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     fontWeight: "bold",
-    fontSize: 45
+    fontFamily: 'HelveticaNeue',
+    fontSize: 55
   },
   headerBorder: {
     height: 50,
