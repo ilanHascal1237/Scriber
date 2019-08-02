@@ -28,14 +28,15 @@ export default class Login extends React.Component {
 		super(props);
 		this.goToHost = () => {
 			props.navigation.navigate(SCREENS.HOST, {
-				socket
+				socket, code: this.code
 			});
 		};
 		this.goToGuest = () => {
 			props.navigation.navigate(SCREENS.USER, {
-				socket
+				socket, code: this.code
 			});
 		};
+		this.code = '';
 	}
 
 	componentDidMount() {
@@ -50,12 +51,14 @@ export default class Login extends React.Component {
 
 	joinRoom() {
 		Alert.prompt('Enter room code', null, code => {
+			this.code = code;
 			socket.emit('joinRoom', code);
 		});
 	}
 
 	makeRoom() {
 		Alert.prompt('Enter room code', null, code => {
+			this.code = code;
 			socket.emit('makeRoom', code);
 		});
 	}

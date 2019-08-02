@@ -50,7 +50,7 @@ export default class Host extends Component {
 		};
 
 		this.state = {
-			code: 'abc',
+			code: '',
 			messages: [
 				'Welcome to Horizons',
 				'Here is the water coolor',
@@ -72,6 +72,7 @@ export default class Host extends Component {
 
 	componentDidMount() {
 		this.socket = this.props.navigation.getParam('socket', null);
+		this.setState({ code: this.props.navigation.getParam('code', null) })
 		this.socket.on('newMsg', this.addMsg);
 	}
 

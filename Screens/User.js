@@ -17,16 +17,9 @@ export default class User extends React.Component {
       messages: [
         'Welcome to Horizons',
         'Here is the water coolor',
-        'Here is the fly infested bathroom',
-        'Welcome to Horizons',
-        'Here is the water coolor',
-        'Here is the fly infested bathroom',
-        'Welcome to Horizons',
-        'Here is the water coolor',
-        'Here is the fly infested bathroom',
-        'can I start recording how do you know a fuck okay this question had bothered me for four years from the time I had heard about the discovery that a quantum computer was spectacularly good okay'
+        'Here is the fly infested bathroom'
       ],
-      code: 'abc'
+      code: ''
     };
     this.socket = null;
     this.addMsg = data => {
@@ -38,6 +31,7 @@ export default class User extends React.Component {
 
   componentDidMount() {
     this.socket = this.props.navigation.getParam('socket', null);
+    this.setState({ code: this.props.navigation.getParam('code', null) })
     this.socket.on('newMsg', this.addMsg);
   }
 
