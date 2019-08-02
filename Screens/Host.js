@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   AsyncStorage,
-  FlatList
+  FlatList,
+  AlertIOS
 } from "react-native";
 
 import { Audio } from "expo-av";
@@ -174,6 +175,14 @@ export default class Host extends Component {
     }
   };
 
+  editMessage = (item, index) => {
+    AlertIOS.prompt('Edit message', null, (message) => {
+      this.setState({
+        messages: Object.assign([], this.state.messages, { [index]: message })
+      })
+    }, 'plain-text', this.state.messages[index], null)
+  }
+
   render() {
     return (
       <View>
@@ -206,9 +215,9 @@ export default class Host extends Component {
           <FlatList
             data={this.state.messages}
             style={{ display: 'flex' }}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
               return (
-                <TouchableOpacity style={styles.textBox} onPress={this.onRecordPressed}>
+                <TouchableOpacity style={styles.textBox} onPress={this.editMessage.bind(this, item, index)}>
                   <Text style={styles.msg}>{item}</Text>
                 </TouchableOpacity>
               )
