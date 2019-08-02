@@ -82,7 +82,7 @@ export default class CameraComponent extends Component {
               alignItems: "center",
               justifyContent: "center"
             }}
-            name="circle"
+            name="circle-thin"
             size={50}
             color="white"
           />
