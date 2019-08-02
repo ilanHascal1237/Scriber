@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
   AsyncStorage,
-  FlatList
+  FlatList,
+  Picker,
+  Button
 } from 'react-native';
 
 export default class User extends React.Component {
@@ -17,27 +19,45 @@ export default class User extends React.Component {
       messages: [
         'Welcome to Horizons',
         'Here is the water coolor',
-        'Here is the fly infested bathroom'
+        'Here is the fly infested bathroom',
       ],
-      code: ''
+      code: '',
+      language: 'en'
     };
     this.socket = null;
     this.addMsg = data => {
       this.setState({
-        messages: this.state.messages.concat([data])
+        messages: [...this.state.messages, data],
+        selectingLanguage: false
       });
     };
+    this.updateMsg = messages => {
+      console.log(messages)
+      this.setState({ messages })
+    }
+    
   }
 
   componentDidMount() {
     this.socket = this.props.navigation.getParam('socket', null);
     this.setState({ code: this.props.navigation.getParam('code', null) })
     this.socket.on('newMsg', this.addMsg);
+    this.socket.on('translate', this.updateMsg);
   }
 
   componentWillUnmount() {
     this.socket.emit('removeMyRooms');
     this.socket.removeListener('newMsg', this.addMsg);
+    this.socket.removeListener('translate', this.updateMsg);
+  }
+
+  translatePressed() {
+    if (this.state.selectingLanguage) {
+      this.socket.emit('translate', { messages: this.state.messages, language: this.state.language})
+      this.setState({selectingLanguage: false})
+    } else {
+      this.setState({selectingLanguage: true})
+    }
   }
 
   render() {
@@ -46,7 +66,7 @@ export default class User extends React.Component {
         <View
           style={{
             alignItems: 'center',
-            padding: 30
+            paddingTop: 30
           }}
         >
           <View style={{ marignTop: 30 }}>
@@ -57,8 +77,10 @@ export default class User extends React.Component {
           <FlatList
             data={this.state.messages}
             style={{
-              height: 500
+              height: 400
             }}
+            ref = "flatList"
+            onContentSizeChange={()=> this.refs.flatList.scrollToEnd()}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
@@ -70,6 +92,22 @@ export default class User extends React.Component {
               );
             }}
           />
+          <Button onPress={this.translatePressed.bind(this)} 
+          title={this.state.selectingLanguage ? 'Confirm' : 'Translate' }/>
+          {this.state.selectingLanguage && 
+          <Picker
+            selectedValue={this.state.language}
+            style={{ alignSelf: 'stretch' }}
+            onValueChange={(itemValue, itemIndex) => {
+              console.log(itemValue);
+              this.setState({ language: itemValue })
+            }}>
+            <Picker.Item label="English" value="en" />
+            <Picker.Item label="Spanish" value="es" />
+            <Picker.Item label="French" value="fr" />
+            <Picker.Item label="Chinese" value="zh" />
+            <Picker.Item label="Russian" value="ru" />
+          </Picker>}
         </View>
       </View>
     );
@@ -87,6 +125,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  picker: {
+
   },
 
   button: {

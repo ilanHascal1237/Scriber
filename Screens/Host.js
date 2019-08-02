@@ -65,7 +65,7 @@ export default class Host extends Component {
 		this.socket = null;
 		this.addMsg = data => {
 			this.setState({
-				messages: this.state.messages.concat([data])
+				messages: [...this.state.messages, data]
 			});
 		};
 	}
@@ -223,8 +223,8 @@ export default class Host extends Component {
 	render() {
 		return (
 			<View>
-				<View style={{ alignItems: 'center', padding: 30 }}>
-					<View style={{ marignTop: 30 }}>
+				<View style={{ padding: 30 }}>
+					<View style={{ marginTop: 30 }}>
 						<Text style={styles.header}>
 							room code: {this.state.code}
 						</Text>
@@ -252,7 +252,9 @@ export default class Host extends Component {
           </TouchableOpacity> */}
 					<FlatList
 						data={this.state.messages}
-						style={{ display: 'flex' }}
+						style={{ height: 400 }}
+						ref = "flatList"
+            			onContentSizeChange={()=> this.refs.flatList.scrollToEnd()}
 						renderItem={({ item, index }) => {
 							return (
 								<TouchableOpacity
@@ -268,20 +270,22 @@ export default class Host extends Component {
 							);
 						}}
 					/>
-
-					<TouchableOpacity
-						style={styles.recordButton}
-						onPress={this.onRecordPressed}
-					>
-						<Icon
-							style={{
-								alignItems: 'center',
-								justifyContent: 'center'
-							}}
-							name="microphone"
-							size={40}
-						/>
-					</TouchableOpacity>
+					<View style={{alignItems: 'center'}}>
+						<TouchableOpacity
+							style={styles.recordButton}
+							onPress={this.onRecordPressed}
+						>
+							<Icon
+								style={{
+									alignItems: 'center',
+									justifyContent: 'center'
+								}}
+								name="microphone"
+								size={40}
+							/>
+						</TouchableOpacity>
+					</View>
+					
 					{/* <TouchableOpacity onPress={this.onPlayPausePressed}>
             <Text>Play Button</Text>
           </TouchableOpacity> */}
