@@ -49,8 +49,8 @@ export default class Host extends Component {
     };
 
     this.state = {
-      code: "",
-      messages: ['Hello world', 'Okay'],
+      code: "abc",
+      messages: ['Welcome to Horizons', 'Here is the water coolor', 'Here is the fly infested bathroom'],
       haveRecordingPermissions: false,
       isLoading: false,
       isRecording: false,
@@ -186,10 +186,9 @@ export default class Host extends Component {
   render() {
     return (
       <View>
-
         <View style={{ alignItems: "center", padding: 30 }}>
           <View style={{ marignTop: 30 }}>
-            <Text style={styles.header}>room code: abc</Text>
+            <Text style={styles.header}>room code: {this.state.code}</Text>
           </View>
           {/* <TextInput
             style={{
