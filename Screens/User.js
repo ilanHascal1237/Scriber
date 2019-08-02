@@ -9,8 +9,6 @@ import {
   FlatList
 } from "react-native";
 
-import { SCREENS } from "../constants";
-
 export default class User extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +17,16 @@ export default class User extends React.Component {
       messages: ['Welcome to Horizons', 'Here is the water coolor', 'Here is the fly infested bathroom'],
       code: 'abc'
     }
+    this.socket = null;
+  }
+
+  componentDidMount() {
+    this.socket = this.props.navigation.getParam('socket', null);
+    this.socket.on('newMsg', (data) => {
+      this.setState({
+        messages: this.state.messages.concat([data])
+      })
+    })
   }
 
   render() {

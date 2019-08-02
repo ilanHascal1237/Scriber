@@ -2,6 +2,11 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, AsyncStorage, FlatList, Alert } from "react-native";
 import { SCREENS } from "../constants";
 
+import io from 'socket.io-client';
+
+const BACKEND = 'http://localhost:3000';
+const socket = io(BACKEND, { forceNew: true });
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -9,8 +14,15 @@ export default class Login extends React.Component {
 
   joinRoom() {
     Alert.prompt('Enter room code', null, (code) => {
-      console.log(code);
-      this.props.navigation.navigate(SCREENS.USER);
+      socket.emit('joinRoom', code);
+      let test = true;
+      socket.on('noRoom', () => {
+        console.log('hi');
+        test = false;
+      });
+      if (test) {
+        this.props.navigation.navigate(SCREENS.USER, { socket });
+      }
     })
   }
 

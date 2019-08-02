@@ -15,6 +15,11 @@ import FormData from "form-data";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import io from 'socket.io-client';
+
+const BACKEND = 'http://localhost:3000';
+const socket = io(BACKEND, { forceNew: true });
+
 
 // import Config from "react-native-config";
 
@@ -56,6 +61,14 @@ export default class Host extends Component {
       isRecording: false,
       isFetching: false
     };
+  }
+
+  componentDidMount() {
+    socket.on('newMsg', (data) => {
+      this.setState({
+        messages: this.state.messages.concat([data])
+      })
+    })
   }
 
   startRecording = async () => {
@@ -126,6 +139,7 @@ export default class Host extends Component {
       );
       const data = await response.json();
       console.log(data);
+      socket.emit('newMsg', data.transcript);
       this.setState({ messages: [...this.state.messages, data.transcript] });
     } catch (error) {
       console.log("ERROR:", error);
