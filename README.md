@@ -1,3 +1,3 @@
 # Scriber
 
-Speech-to-text tool for tour guides, lectures, and other groups.
+Speech-to-text for tour guides, lectures, and other groups. Built with React Native.
